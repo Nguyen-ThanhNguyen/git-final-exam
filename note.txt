@@ -23,3 +23,41 @@ BÀI 4 – GHI CHÚ VỀ RESET & REVERT
 
 5) Kết luận:
 - Nắm được khi nào dùng reset (chuẩn bị lịch sử) và khi nào dùng revert (đảo ngược an toàn).
+
+
+6) Minh họa nhanh bằng git log
+- Sau chuỗi thao tác, dùng: git log --oneline --decorate --graph --all
+- Mục tiêu: quan sát commit mới do 'revert' tạo ra và vị trí của HEAD so với main.
+
+7) Các chế độ reset chi tiết
+- git reset --soft <commit>: HEAD lùi về <commit>, giữ thay đổi ở Staging (Index).
+- git reset --mixed <commit> (mặc định): HEAD lùi về, thay đổi chuyển về Working tree (Unstaged).
+- git reset --hard <commit>: HEAD lùi về, xóa sạch thay đổi ở cả Staging và Working tree (cực kỳ cẩn thận, có thể mất dữ liệu chưa push).
+
+8) Revert trong nhiều tình huống
+- Revert 1 commit: git revert <hash>
+- Revert 1 dải commit: git revert <old>..<new>   # thực tế nên revert tuần tự từng commit để dễ xử lý conflict.
+- Revert commit merge: git revert -m 1 <merge-hash>  # -m 1: giữ lịch sử theo parent 1 (thường là nhánh nhận merge).
+- Nếu conflict khi revert: sửa file, git add ., rồi git revert --continue.
+
+9) Khôi phục file cụ thể (khác với revert lịch sử)
+- Lấy phiên bản file từ commit cũ: git restore --source=<hash> -- <file>
+- Tương thích git cũ: git checkout <hash> -- <file>
+- Sau đó commit bình thường: git add <file> && git commit -m "Restore <file> from <hash>"
+
+10) Lỗi thường gặp & cách xử lý
+- 'nothing to commit, working tree clean': chưa thay đổi hoặc chưa lưu file; hãy thêm/sửa nội dung rồi git add.
+- 'fatal: ambiguous argument HEAD': repo chưa có commit; hãy tạo commit đầu tiên.
+- 'src refspec <branch> does not match any': nhánh chưa có commit đầu tiên; tạo file, commit rồi push -u origin <branch>.
+- Revert nhầm commit: đơn giản revert tiếp commit vừa tạo (tạo thêm 1 commit đảo ngược cái đảo ngược).
+
+11) Quy trình khuyến nghị khi đã push public
+- Ưu tiên git revert để giữ lịch sử rõ ràng và không rewrite commit đã public.
+- Chỉ dùng reset (soft/mixed) để dọn dẹp local trước khi push; tránh reset --hard sau khi đã chia sẻ.
+
+12) Checklist tự đánh giá
+[ ] Có 2+ commit liên tiếp trên note.txt.
+[ ] Đã dùng reset --soft HEAD~1, sau đó tạo commit chỉnh sửa.
+[ ] Đã dùng git revert <hash> và giải thích trong log.
+[ ] Đã ghi chú sự khác nhau giữa reset và revert trong note.txt.
+[ ] chụp 'git log --oneline --decorate --graph --all' và 'git status'.
