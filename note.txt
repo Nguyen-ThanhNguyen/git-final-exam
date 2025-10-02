@@ -1,0 +1,25 @@
+BÀI 4 – GHI CHÚ VỀ RESET & REVERT
+
+1) Mục tiêu:
+- Thực hành tạo 2 commit liên tiếp trên cùng một file.
+- Dùng reset (soft) để gom lại và sửa commit gần nhất.
+- Dùng revert để tạo commit đảo ngược an toàn.
+
+2) Quy trình đã làm:
+- Tạo file note.txt và commit lần 1 (“Add note.txt”).
+- Bổ sung nội dung và commit lần 2 (“Update note.txt”).
+- Dùng git reset --soft HEAD~1 để quay lại trước commit 2 nhưng giữ nguyên thay đổi trong staging.
+- Chỉnh sửa nội dung cho đúng và tạo commit mới (“Re-update note.txt with correct info”).
+- Dùng git revert <hash-commit> để đảo ngược commit vừa tạo, kiểm tra lịch sử sau khi revert.
+
+3) So sánh nhanh:
+- reset --soft: chỉ lùi lại con trỏ HEAD, giữ thay đổi ở staging (an toàn cho lịch sử local, cẩn thận khi đã push).
+- revert: tạo commit mới để đảo ngược commit cũ (an toàn cho repo đã push).
+
+4) Bài học rút ra:
+- Khi đã push public, ưu tiên dùng revert để không làm rối lịch sử đồng đội.
+- reset dùng tốt cho dọn dẹp commit cục bộ trước khi push.
+- Luôn kiểm tra git log --oneline và git status trước/ sau khi thao tác.
+
+5) Kết luận:
+- Nắm được khi nào dùng reset (chuẩn bị lịch sử) và khi nào dùng revert (đảo ngược an toàn).
